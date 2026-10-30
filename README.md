@@ -1,24 +1,34 @@
-# Cache
+# claude-desktop-cache-and-cost
 
-Shows the prompt-cache countdown and the session cost as a single status line under the prompt in the Claude Desktop Code tab, for example `⏱ 56m · $1.11`.
+A status line for the Code tab of Claude Desktop: how long your prompt cache stays warm, and what the session has cost so far.
 
-The countdown starts when a turn ends and assumes a 1-hour cache TTL (edit `TTL_MS` in `hooks/register.tsx` if yours differs). While a turn runs it reads `Running`; once the cache lapses it reads `🔴 Expired`. The line refreshes every minute. No setup is needed.
+![Cache countdown: 58 minutes left, $1.95 spent](screenshots/countdown.png)
+
+![Cache expired, $2.26 spent](screenshots/expired.png)
+
+## Why
+
+While the cache is warm, your next prompt reuses the conversation cheaply. Once it expires, the next prompt pays to send the whole conversation again. The countdown tells you how long you have; the cost tells you what the session has spent.
 
 ## Install
 
-In a terminal session:
+In Claude Desktop: click **+** next to the prompt box, then **Plugins**, **Add marketplace** with `jcesarperez/claude-desktop-cache-and-cost`, then **Add plugin**.
 
-```
-/plugin install Cache --marketplace jcesarperez/claude-desktop-cache-and-cost
-```
-
-From a shell:
+Or from a shell:
 
 ```
 claude plugin install Cache --marketplace jcesarperez/claude-desktop-cache-and-cost
 ```
 
-In the Claude desktop app: click + next to the prompt box, then Plugins, Add marketplace with `jcesarperez/claude-desktop-cache-and-cost`, then Add plugin.
+The line shows in the Desktop Code tab only.
+
+## Extra: a 5-minute cache
+
+The countdown assumes the cache lasts 1 hour after each response. If yours lasts 5 minutes, run this in Claude Code and pick `5m`:
+
+```
+/plugin configure Cache@jcesarperez
+```
 
 ## License
 
