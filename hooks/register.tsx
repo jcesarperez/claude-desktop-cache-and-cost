@@ -30,7 +30,7 @@ const refresh = async ($: Parameters<typeof read>[0]) => {
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     void refresh($)
-    $.clock.every(15000, () => void refresh($))
+    $.clock.every(60000, () => void refresh($))
 
     return next(e)
   })
