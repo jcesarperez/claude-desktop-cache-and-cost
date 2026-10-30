@@ -3,6 +3,7 @@ declare module 'claude-code' {
     'Cache': {
       lastAt: Shaped<number | null>
       isRunning: Shaped<boolean>
+      cachedModel: Shaped<string | null>
     }
   }
 }

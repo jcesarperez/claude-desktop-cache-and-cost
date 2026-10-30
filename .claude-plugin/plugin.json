@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Status line with the prompt-cache countdown and session cost",
   "types": "./types/index.d.ts",
+  "userConfig": {
+    "cacheTtl": {
+      "type": "string",
+      "title": "Prompt-cache TTL",
+      "description": "How long the API keeps the prompt cache after a response on your plan",
+      "default": "1h",
+      "options": ["1h", "5m"]
+    }
+  },
   "author": {
     "name": "Julio César Pérez"
   },
