@@ -90,14 +90,14 @@ test('shows a dash before the first turn', async ($, on) => {
   const { clock, status } = engine(on)
   await start($, clock)
 
-  expect(status()).toBe('⏱ — · $1.50')
+  expect(status()).toBe('⏲ — · $1.50')
 })
 
 test('leaves the cost out when the host keeps none', async ($, on) => {
   const { clock, status } = engine(on, { usd: null })
   await start($, clock)
 
-  expect(status()).toBe('⏱ —')
+  expect(status()).toBe('⏲ —')
 })
 
 test('reads Running while a turn runs', async ($, on) => {
@@ -105,7 +105,7 @@ test('reads Running while a turn runs', async ($, on) => {
   await start($, clock)
   await turn($)
 
-  expect(status()).toBe('⏱ Running · $1.50')
+  expect(status()).toBe('⏲ Running · $1.50')
 })
 
 test('counts down whole minutes from the end of the turn', async ($, on) => {
@@ -113,11 +113,11 @@ test('counts down whole minutes from the end of the turn', async ($, on) => {
   await start($, clock)
   await (await turn($))()
 
-  expect(status()).toBe('⏱ 60m · $1.50')
+  expect(status()).toBe('⏲ 60m · $1.50')
   await clock.advance(1000)
-  expect(status()).toBe('⏱ 59m · $1.50')
+  expect(status()).toBe('⏲ 59m · $1.50')
   await clock.advance(30 * MINUTE)
-  expect(status()).toBe('⏱ 29m · $1.50')
+  expect(status()).toBe('⏲ 29m · $1.50')
 })
 
 test('reads Expired once the TTL has passed', async ($, on) => {
@@ -126,7 +126,7 @@ test('reads Expired once the TTL has passed', async ($, on) => {
   await (await turn($))()
   await clock.advance(61 * MINUTE)
 
-  expect(status()).toBe('🔴 Expired · $1.50')
+  expect(status()).toBe('⭕ Expired · $1.50')
 })
 
 test('a subagent ending mid-turn keeps Running', async ($, on) => {
@@ -135,7 +135,7 @@ test('a subagent ending mid-turn keeps Running', async ($, on) => {
   await turn($)
   await (await turn($, { agentId: 'a1' }))()
 
-  expect(status()).toBe('⏱ Running · $1.50')
+  expect(status()).toBe('⏲ Running · $1.50')
 })
 
 test('a turn interrupted before any response keeps the old countdown', async ($, on) => {
@@ -145,7 +145,7 @@ test('a turn interrupted before any response keeps the old countdown', async ($,
   await clock.advance(10 * MINUTE)
   await (await turn($, { usage: null }))()
 
-  expect(status()).toBe('⏱ 50m · $1.50')
+  expect(status()).toBe('⏲ 50m · $1.50')
 })
 
 test('counts down from the TTL the plugin is set to', { options: { cacheTtl: '5m' } }, async ($, on) => {
@@ -153,9 +153,9 @@ test('counts down from the TTL the plugin is set to', { options: { cacheTtl: '5m
   await start($, clock)
   await (await turn($))()
 
-  expect(status()).toBe('⏱ 5m · $1.50')
+  expect(status()).toBe('⏲ 5m · $1.50')
   await clock.advance(6 * MINUTE)
-  expect(status()).toBe('🔴 Expired · $1.50')
+  expect(status()).toBe('⭕ Expired · $1.50')
 })
 
 test('switching model leaves the new one with no cache', async ($, on) => {
@@ -165,7 +165,7 @@ test('switching model leaves the new one with no cache', async ($, on) => {
   useModel('sonnet')
   await clock.advance(MINUTE)
 
-  expect(status()).toBe('🔴 Expired · $1.50')
+  expect(status()).toBe('⭕ Expired · $1.50')
 })
 
 test('switching back to the cached model shows its countdown again', async ($, on) => {
@@ -177,7 +177,7 @@ test('switching back to the cached model shows its countdown again', async ($, o
   useModel('opus')
   await clock.advance(MINUTE)
 
-  expect(status()).toBe('⏱ 58m · $1.50')
+  expect(status()).toBe('⏲ 58m · $1.50')
 })
 
 test('compacting the conversation leaves no cache', async ($, on) => {
@@ -187,7 +187,7 @@ test('compacting the conversation leaves no cache', async ($, on) => {
   await $.session.compact({ trigger: 'manual', messages: [{ role: 'user', text: 'hi', toolUses: [] }] })
   await clock.settle()
 
-  expect(status()).toBe('🔴 Expired · $1.50')
+  expect(status()).toBe('⭕ Expired · $1.50')
 })
 
 test('a resumed session picks up the countdown it left', async ($, on) => {
@@ -196,7 +196,7 @@ test('a resumed session picks up the countdown it left', async ($, on) => {
   })
   await start($, clock)
 
-  expect(status()).toBe('⏱ 50m · $1.50')
+  expect(status()).toBe('⏲ 50m · $1.50')
 })
 
 test('the countdown is kept for a later resume', async ($, on) => {

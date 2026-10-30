@@ -81,7 +81,7 @@ const refresh = async ($: $) => {
   // While counting down, redraw just after the minute shown changes.
   if (!running && left !== null && left > 0) schedule($, (left % MINUTE) + 100)
 
-  $.ui.status(`${left !== null && left <= 0 && !running ? '🔴' : '⏱'} ${label}${usd === undefined ? '' : ` · $${usd.toFixed(2)}`}`)
+  $.ui.status(`${left !== null && left <= 0 && !running ? '⭕' : '⏲'} ${label}${usd === undefined ? '' : ` · $${usd.toFixed(2)}`}`)
 }
 
 export const register: Register = (on, options) => {
