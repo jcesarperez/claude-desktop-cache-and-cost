@@ -9,16 +9,16 @@ The countdown starts when a turn ends and assumes a 1-hour cache TTL (edit `TTL_
 In a terminal session:
 
 ```
-/plugin install Cache --marketplace jcesarperez/claude-desktop-cache-status
+/plugin install Cache --marketplace jcesarperez/claude-desktop-cache-and-cost
 ```
 
 From a shell:
 
 ```
-claude plugin install Cache --marketplace jcesarperez/claude-desktop-cache-status
+claude plugin install Cache --marketplace jcesarperez/claude-desktop-cache-and-cost
 ```
 
-In the Claude desktop app: click + next to the prompt box, then Plugins, Add marketplace with `jcesarperez/claude-desktop-cache-status`, then Add plugin.
+In the Claude desktop app: click + next to the prompt box, then Plugins, Add marketplace with `jcesarperez/claude-desktop-cache-and-cost`, then Add plugin.
 
 ## License
 
