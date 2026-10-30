@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" rx="200" fill="#F5F5F3"/>
+
+  <g fill="none" stroke="#3D3D3A" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+    <!-- crown and side button -->
+    <line x1="452" y1="232" x2="572" y2="232"/>
+    <line x1="512" y1="232" x2="512" y2="300"/>
+    <line x1="694" y1="378" x2="736" y2="336"/>
+    <!-- case -->
+    <circle cx="512" cy="560" r="260"/>
+  </g>
+
+  <!-- dollar sign -->
+  <text x="512" y="568" text-anchor="middle" dominant-baseline="central"
+        font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="500" font-size="280" fill="#3D3D3A">$</text>
+</svg>
