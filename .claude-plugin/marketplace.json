@@ -1,0 +1,5 @@
+{
+  "name": "jcesarperez",
+  "owner": { "name": "Julio César Pérez" },
+  "plugins": [{ "name": "Cache", "source": "./" }]
+}

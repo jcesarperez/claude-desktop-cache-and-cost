@@ -1,0 +1,10 @@
+{
+  "name": "Cache",
+  "version": "0.1.0",
+  "description": "Status line with the prompt-cache countdown and session cost",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Julio César Pérez"
+  },
+  "license": "MIT"
+}
