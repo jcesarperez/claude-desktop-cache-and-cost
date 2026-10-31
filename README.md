@@ -22,13 +22,9 @@ claude plugin install Cache --marketplace jcesarperez/claude-desktop-cache-and-c
 
 The line shows in the Desktop Code tab only.
 
-## Extra: a 5-minute cache
+## How long the cache lasts
 
-The countdown assumes the cache lasts 1 hour after each response. If yours lasts 5 minutes, run this in Claude Code and pick `5m`:
-
-```
-/plugin configure Cache@jcesarperez
-```
+The countdown runs from the start of the last request that used the cache, as the API counts it. It reads whether that cache lasts 1 hour or 5 minutes from the session's transcript after each turn, and assumes 1 hour until it has seen one.
 
 ## License
 
