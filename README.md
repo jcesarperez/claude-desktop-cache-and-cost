@@ -2,7 +2,7 @@
 
 A status line for the Code tab of Claude Desktop: how long your prompt cache stays warm, and what the session has cost so far.
 
-![Cache countdown: 58 minutes left, $1.95 spent](screenshots/countdown.png)
+![Cache countdown: 56 minutes left, $0.55 spent](screenshots/countdown.png)
 
 ![Cache expired, $2.26 spent](screenshots/expired.png)
 
