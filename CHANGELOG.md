@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- The cost updates as soon as a subagent or a workflow agent finishes, instead of up to a minute later.
+
 ## 0.3.0 - 2026-10-31
 
 - The countdown runs from the start of the last request that read or wrote the cache, as the API counts it, not from the end of the turn. A long response or an interrupted tool no longer leaves it showing more time than the cache has.

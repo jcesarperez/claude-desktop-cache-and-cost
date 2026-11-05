@@ -18,6 +18,7 @@ const engine = (
   const clock = mock.clock(on, { now: START })
   let line: string | undefined
   let model = 'opus'
+  let cost = usd
 
   const saved: Record<string, unknown> = { ...store }
   on('store.get', (_, e) => ({ value: saved[e.key] }))
@@ -37,7 +38,7 @@ const engine = (
   on('session.start', (_, e) => ({ cwd: e.cwd }))
   on('session.surfaces', () => ({ value: surfaces }))
   on('session.usage', () => ({
-    value: { startedAt: START, rateLimits: [], ...(usd === null ? {} : { cost: { usd } }) } as unknown as SessionUsage,
+    value: { startedAt: START, rateLimits: [], ...(cost === null ? {} : { cost: { usd: cost } }) } as unknown as SessionUsage,
   }))
   on('ui.status', (_, e) => {
     line = e.text
@@ -85,6 +86,9 @@ const engine = (
     },
     useModel: (next: string) => {
       model = next
+    },
+    spend: (next: number) => {
+      cost = next
     },
   }
 }
@@ -571,4 +575,85 @@ test("a session's own record wins over its transcript", async ($, on) => {
   await start($, clock)
 
   expect(status()).toBe('⏲ 40m · $1.50')
+})
+
+
+// A subagent the Agent tool runs inside the main turn: its own loop, its own cache, the session's cost.
+test('a subagent spending shows in the cost within a minute', async ($, on) => {
+  const { clock, status, spend } = engine(on)
+  await start($, clock)
+  await turn($)
+  const done = await turn($, { agentId: 'a1' })
+  spend(2.25)
+  await done()
+  await clock.advance(MINUTE)
+
+  expect(status()).toBe('⏲ Running · $2.25')
+})
+
+test('a subagent ending shows its cost at once', async ($, on) => {
+  const { clock, status, spend } = engine(on)
+  await start($, clock)
+  await turn($)
+  const done = await turn($, { agentId: 'a1' })
+  spend(2.25)
+  await done()
+
+  expect(status()).toBe('⏲ Running · $2.25')
+})
+
+// A workflow runs in the background: the main turn that started it ends, its agents run on with ids no list names.
+const workflow = async ($: Engine) => {
+  await (await turn($))()
+  return turn($, { agentId: 'wf-1' })
+}
+
+test('the countdown keeps going while a workflow runs', async ($, on) => {
+  const { clock, status } = engine(on)
+  await start($, clock)
+  await workflow($)
+  await clock.advance(2 * MINUTE)
+
+  expect(status()).toBe('⏲ 58m · $1.50')
+})
+
+test("a workflow's agents leave the countdown alone", async ($, on) => {
+  const { clock, status } = engine(on)
+  await start($, clock)
+  const done = await workflow($)
+  await clock.advance(10 * MINUTE)
+  await done()
+
+  expect(status()).toBe('⏲ 50m · $1.50')
+})
+
+test("a workflow's spending shows in the cost within a minute", async ($, on) => {
+  const { clock, status, spend } = engine(on)
+  await start($, clock)
+  await workflow($)
+  await clock.advance(30 * 1000)
+  spend(3)
+  await clock.advance(MINUTE)
+
+  expect(status()).toBe('⏲ 58m · $3.00')
+})
+
+test('a workflow agent ending shows its cost at once', async ($, on) => {
+  const { clock, status, spend } = engine(on)
+  await start($, clock)
+  const done = await workflow($)
+  await clock.advance(30 * 1000)
+  spend(3)
+  await done()
+
+  expect(status()).toBe('⏲ 59m · $3.00')
+})
+
+test('the main turn a workflow ends in reads Running', async ($, on) => {
+  const { clock, status } = engine(on)
+  await start($, clock)
+  await (await workflow($))()
+  await turn($)
+
+  expect(status()).toBe('⏲ Running · $1.50')
 })

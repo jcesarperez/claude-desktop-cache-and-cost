@@ -217,7 +217,11 @@ export const register: Register = (on) => {
   })
 
   on('turn.complete', async ($, e, next) => {
-    if (e.agentId !== undefined) return next(e)
+    // A subagent's or a workflow agent's spending is the session's: show its cost now, not at the next minute.
+    if (e.agentId !== undefined) {
+      await refresh($)
+      return next(e)
+    }
 
     await update($, isRunning, () => false)
     // The turn's last response is usually in the transcript by now; one written later keeps the TTL found here.
