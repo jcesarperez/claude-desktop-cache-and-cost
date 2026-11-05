@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.1 - 2026-11-05
 
 - The cost updates as soon as a subagent or a workflow agent finishes, instead of up to a minute later.
 
