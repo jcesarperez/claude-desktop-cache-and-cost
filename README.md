@@ -26,6 +26,10 @@ The line shows in the Desktop Code tab only.
 
 The countdown runs from the start of the last request that used the cache, as the API counts it. It reads whether that cache lasts 1 hour or 5 minutes from the session's transcript after each turn, and assumes 1 hour until it has seen one.
 
+## What the cost counts
+
+The same total as `/cost`: every request of the session, its subagents and workflow agents included. A session you start from another one keeps its own total.
+
 ## License
 
 MIT

@@ -1,5 +1,6 @@
 {
   "name": "jcesarperez",
   "owner": { "name": "Julio César Pérez" },
+  "description": "Cache: the prompt-cache countdown and session cost in the Claude Desktop Code tab",
   "plugins": [{ "name": "Cache", "source": "./" }]
 }
