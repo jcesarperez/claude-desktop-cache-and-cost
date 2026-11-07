@@ -18,4 +18,5 @@ A Claude Code mod: a status line under the prompt in the Claude Desktop Code tab
 ## Files
 
 - `README.md` is for people installing the plugin.
+- `scripts/session-cost.py <session-id>` prices a session from its transcripts, main thread and subagents: the check for the status line's cost.
 - `design/icon.svg` is the source of `.claude-plugin/icon.png`. Regenerate with `qlmanage -t -s 1024 -o /tmp design/icon.svg`. Keep the SVG out of `.claude-plugin/` and `assets/`: the validator would take it as the icon and reject it.
