@@ -1,0 +1,12 @@
+#!/bin/sh
+# Blocks a commit the plugin's own checks reject. Enable once per clone: git config core.hooksPath .githooks
+set -e
+cd "$(git rev-parse --show-toplevel)"
+
+if grep -rnE 'Date\.now\(|new Date\(\)' hooks; then
+  echo 'pre-commit: read the time from $.clock.now(), so the tests'"'"' mock clock drives it.' >&2
+  exit 1
+fi
+
+claude plugin validate . >/dev/null || { claude plugin validate .; echo 'pre-commit: claude plugin validate failed.' >&2; exit 1; }
+claude plugin test . >/dev/null 2>&1 || { claude plugin test .; echo 'pre-commit: claude plugin test failed.' >&2; exit 1; }

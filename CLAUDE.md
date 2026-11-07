@@ -5,9 +5,8 @@ A Claude Code mod: a status line under the prompt in the Claude Desktop Code tab
 ## Working on it
 
 - Load the `plugin-authoring` skill before touching `hooks/`: it holds the mod API's types and docs.
-- Check every change with `claude plugin test .` and `claude plugin validate .`.
 - Write a failing test in `tests/cache.test.ts` before each fix.
-- Read time from `$.clock.now()`, so the tests' mock clock drives it.
+- `.githooks/pre-commit` runs `claude plugin test .` and `claude plugin validate .`, and rejects `Date.now()` in `hooks/`. Enable it once per clone: `git config core.hooksPath .githooks`. CI (`.github/workflows/check.yml`) runs the same checks with a pinned CLI version: bump it with yours.
 
 ## Gotchas
 
