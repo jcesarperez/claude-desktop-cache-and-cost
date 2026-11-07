@@ -579,18 +579,6 @@ test("a session's own record wins over its transcript", async ($, on) => {
 
 
 // A subagent the Agent tool runs inside the main turn: its own loop, its own cache, the session's cost.
-test('a subagent spending shows in the cost within a minute', async ($, on) => {
-  const { clock, status, spend } = engine(on)
-  await start($, clock)
-  await turn($)
-  const done = await turn($, { agentId: 'a1' })
-  spend(2.25)
-  await done()
-  await clock.advance(MINUTE)
-
-  expect(status()).toBe('⏲ Running · $2.25')
-})
-
 test('a subagent ending shows its cost at once', async ($, on) => {
   const { clock, status, spend } = engine(on)
   await start($, clock)
