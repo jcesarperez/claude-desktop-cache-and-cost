@@ -1,0 +1,36 @@
+name: Check
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code@2.1.314
+
+      - name: Read time from $.clock.now(), not Date
+        run: |
+          if grep -rnE 'Date\.now\(|new Date\(\)' hooks; then
+            echo "::error::hooks/ must read time from \$.clock.now()"
+            exit 1
+          fi
+
+      - name: Validate plugin
+        run: claude plugin validate .
+
+      - name: Test plugin
+        run: claude plugin test .
