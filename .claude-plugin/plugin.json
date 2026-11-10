@@ -1,6 +1,6 @@
 {
   "name": "Cache",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Status line with the prompt-cache countdown and session cost",
   "types": "./types/index.d.ts",
   "author": {

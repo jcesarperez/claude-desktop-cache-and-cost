@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.3 - 2026-11-10
+
+- While Claude asks you a question or waits on a plan's approval, the line counts down instead of reading Running.
+- The README says why the line isn't in Chat.
+
 ## 0.3.2 - 2026-11-07
 
 - The README says what the cost counts: the whole session, its subagents and workflow agents included, as `/cost` does.
