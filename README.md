@@ -30,6 +30,12 @@ The countdown runs from the start of the last request that used the cache, as th
 
 The same total as `/cost`: every request of the session, its subagents and workflow agents included. A session you start from another one keeps its own total.
 
+## FAQ
+
+### Does it work in Chat?
+
+No. Chat caches your prompts too, but it shows neither the cache nor a cost per request, and it doesn't run plugins, so there is nothing for this line to read. The terminal and VS Code have their own tools for this.
+
 ## License
 
 MIT
