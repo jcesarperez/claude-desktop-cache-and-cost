@@ -22,6 +22,16 @@ claude plugin install Cache --marketplace jcesarperez/claude-desktop-cache-and-c
 
 The line shows in the Desktop Code tab only.
 
+## Update
+
+New releases don't install on their own: Claude Code auto-updates only Anthropic's own marketplaces by default. To update now, then start a new session:
+
+```
+claude plugin marketplace update jcesarperez && claude plugin update Cache@jcesarperez
+```
+
+To get releases automatically, run `/plugin` in a `claude` terminal, open **Marketplaces**, pick `jcesarperez` and enable auto-update. Updates install when a session starts.
+
 ## How long the cache lasts
 
 The countdown runs from the start of the last request that used the cache, as the API counts it. It reads whether that cache lasts 1 hour or 5 minutes from the session's transcript after each turn, and assumes 1 hour until it has seen one.
