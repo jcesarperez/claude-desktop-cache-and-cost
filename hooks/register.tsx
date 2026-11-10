@@ -216,6 +216,22 @@ export const register: Register = (on) => {
     return result
   })
 
+  // A dialog that waits on the person sends no request: the cache counts down meanwhile.
+  for (const tool of ['AskUserQuestion', 'ExitPlanMode']) {
+    on('tool.call', { tool }, async ($, e, next) => {
+      if (e.agentId !== undefined || !(await read($, isRunning))) return next(e)
+
+      await update($, isRunning, () => false)
+      await refresh($)
+      try {
+        return await next(e)
+      } finally {
+        await update($, isRunning, () => true)
+        await refresh($)
+      }
+    })
+  }
+
   on('turn.complete', async ($, e, next) => {
     // A subagent's or a workflow agent's spending is the session's: show its cost now, not at the next minute.
     if (e.agentId !== undefined) {

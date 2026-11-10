@@ -46,6 +46,11 @@ const engine = (
   })
   on('turn.start', (_, e) => ({ turnId: e.turnId }))
   on('turn.complete', () => ({ text: '' }))
+  // The tool beneath: `whileTool` runs while it is open, as a dialog waits on the person.
+  on('tool.call', async () => {
+    await tool.whileOpen?.()
+    return { result: 'ok' }
+  })
   // The API beneath: one chunk, then the response with the usage `step` set.
   on('turn.step', async function* (_, e) {
     yield { kind: 'text', index: 0, text: '' }
@@ -130,6 +135,9 @@ const row = ({
 const prompt = (at: number, uuid: string) => JSON.stringify({ type: 'user', isSidechain: false, uuid, timestamp: iso(at) }) + '\n'
 const request = (at: number) => JSON.stringify({ type: 'api-request', timestamp: iso(at) }) + '\n'
 
+// What runs while the next tool call is open.
+const tool: { whileOpen?: () => Promise<void> } = {}
+
 // What the next step's response reports; `step` sets it before each request.
 const response: { usage: typeof USAGE | null } = { usage: USAGE }
 
@@ -198,6 +206,38 @@ test('reads Running while a turn runs', async ($, on) => {
   await turn($)
 
   expect(status()).toBe('⏲ Running · $1.50')
+})
+
+for (const name of ['AskUserQuestion', 'ExitPlanMode']) {
+  test(`counts down while ${name} waits on the person, then reads Running again`, async ($, on) => {
+    const { clock, status } = engine(on)
+    await start($, clock)
+    await turn($)
+    let whileOpen: string | undefined
+    tool.whileOpen = async () => {
+      await clock.advance(2 * MINUTE)
+      whileOpen = status()
+    }
+    await $.tool.call({ tool: name, questions: [] } as never)
+    tool.whileOpen = undefined
+
+    expect(whileOpen).toBe('⏲ 58m · $1.50')
+    expect(status()).toBe('⏲ Running · $1.50')
+  })
+}
+
+test('keeps Running while another tool runs', async ($, on) => {
+  const { clock, status } = engine(on)
+  await start($, clock)
+  await turn($)
+  let whileOpen: string | undefined
+  tool.whileOpen = async () => {
+    whileOpen = status()
+  }
+  await $.tool.call({ tool: 'Bash', command: 'ls' } as never)
+  tool.whileOpen = undefined
+
+  expect(whileOpen).toBe('⏲ Running · $1.50')
 })
 
 test('counts down whole minutes from the last request', async ($, on) => {
